@@ -1,17 +1,18 @@
-﻿using GestionEmpleados;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace GestionEmpleados
+namespace project2.Clases
 {
     //hereda de la clase empleado
     public class Programador : Empleado
     {
-        public string LenguajeProgramacion { get; set; }
+        /*public string LenguajeProgramacion { get; set; }
 
-        public Programador(string nombre, int edad, decimal salario, string lenguajeProgramacion) 
-            : base(nombre, edad, salario)
+        public Programador(string nombre, int edad, decimal salario, int id, string lenguajeProgramacion) 
+            : base(nombre, edad, salario, id)
         {
             LenguajeProgramacion = lenguajeProgramacion;
             //asignar el lenguaje de programación que se le da en el constructor
@@ -25,6 +26,6 @@ namespace GestionEmpleados
         public override void MostrarInformacion()
         {
             Programar();//llama el metodo de programar
-        }
+        }*/
     }
 }
