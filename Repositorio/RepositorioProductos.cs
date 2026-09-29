@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MySql.Data.MySqlClient;
+using System.Reflection.Metadata.Ecma335;
 
 //agregar vender 
 namespace project2.Repositorio
 
 {
-    internal class RepositorioProductos : Irepocitory<Producto>         
+    //siempre marca error el repocitory
+    internal class RepositorioProductos : Irepocitory<Producto>
 
     {
         private string connStr = "Server=localhost;Port=3307;Database=project2_db;Uid=root;Password=19503236;";
@@ -93,7 +95,7 @@ namespace project2.Repositorio
                 }
             }
             //throw new NotImplementedException();
-                        return productos;
+            return productos;
         }
         //lista
         public List<Producto> Lista()
@@ -150,28 +152,104 @@ namespace project2.Repositorio
                 }
             }
         }
-        public void Vender(Producto producto)
+        public Producto ObtenerProducto(int id)
+        {
+            Producto producto = null;
+
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                string query = "SELECT ID, Nombre, Precio FROM productos WHERE ID = @id";
+
+                using (MySqlCommand comm = new MySqlCommand(query, conn))
+                {
+                    comm.Parameters.AddWithValue("@id", id);
+
+                    try
+                    {
+                        conn.Open();
+
+                        using (MySqlDataReader reader = comm.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                producto = new Producto
+                                {
+                                    ID = reader.GetInt32("ID"),
+                                    Nombre = reader.GetString("Nombre"),
+                                    Precio = reader.GetDecimal("Precio")
+                                };
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error al consultar producto: " + ex.Message);
+                    }
+                }
+            }
+
+            return producto;
+        }
+        
+
+        public void Vender(int idProducto, int cantidad, decimal subtotal)
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
-                string query = "INSERT INTO ventas (Nombre, Precio) VALUES (@nombre, @precio)";
+
+                string query = "INSERT INTO ventas (ProductoID, Cantidad, Total, Fecha) VALUES (@idProducto, @cantidad, @subtotal, @fecha)";
+
                 using (MySqlCommand comm = new MySqlCommand(query, conn))
                 {
-                    comm.Parameters.AddWithValue("@nombre", producto.Nombre);
-                    comm.Parameters.AddWithValue("@precio", producto.Precio);
+                    comm.Parameters.AddWithValue("@idProducto", idProducto);
+                    comm.Parameters.AddWithValue("@cantidad", cantidad);
+                    comm.Parameters.AddWithValue("@subtotal", subtotal);
+                    comm.Parameters.AddWithValue("@fecha", DateTime.Now);
+
                     try
                     {
                         conn.Open();
                         comm.ExecuteNonQuery();
-                        Console.WriteLine("Producto vendido");
+                        Console.WriteLine("Venta registrada en MySQL con éxito.");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Error: " + ex.Message);
+                        Console.WriteLine("Error al guardar venta: " + ex.Message);
+                    }
+                }
+            }
+        }
+        public void HistorialVentas()
+        {
+            using (MySqlConnection conn = new MySqlConnection(connStr))
+            {
+                // Realizamos un JOIN para mostrar el nombre del producto vendido
+                string query = @"SELECT v.ID, p.Nombre, v.Cantidad, v.Total, v.Fecha 
+                        FROM ventas v 
+                        INNER JOIN productos p ON v.ProductoID = p.ID";
+
+                using (MySqlCommand comm = new MySqlCommand(query, conn))
+                {
+                    try
+                    {
+                        conn.Open();
+                        using (MySqlDataReader reader = comm.ExecuteReader())
+                        {
+                            Console.WriteLine("\n=== HISTORIAL DE VENTAS ===");
+                            while (reader.Read())
+                            {
+                                Console.WriteLine($"ID Venta: {reader["ID"]} | Producto: {reader["Nombre"]} | Cantidad: {reader["Cantidad"]} | Total: ${reader["Total"]} | Fecha: {reader["Fecha"]}");
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error al cargar historial: " + ex.Message);
                     }
                 }
             }
         }
     }
+
 }
 

@@ -13,9 +13,8 @@ namespace project2.Clases
         public string Nombre { get; set; }
         public int Edad { get; set; }
         public decimal Salario { get; set; }
+
         public Empleado() { }
-
-
         public Empleado(int id, int codigo, string nombre, int edad, decimal salario)
         {
             ID = id;
@@ -24,31 +23,21 @@ namespace project2.Clases
             Edad = edad;
             Salario = salario;
         }
-        // Constructor vacío
-        /*public Empleado()
-        // Constructor con parámetros
+        /* Constructor vacío
+        public Empleado()
+         Constructor con parámetros
         public Empleado(string nombre, int edad, decimal salario, int id)
-        {
-            Nombre = nombre;
+        {            Nombre = nombre;
             Edad = edad;
             Salario = salario;
-            Id = id;
-        }*/
-
+            Id = id;}*/
         public virtual void MostrarInformacion()
         {
             Console.WriteLine("$[ID:{ ID}]\n Codigo: {Codigo}\n Empleado: {Nombre}\n Edad: {Edad}\n Salario: {Salario:C}");
 
-           /* Console.WriteLine(
-                $"Empleado: {Nombre}, Edad: {Edad}, Salario: {Salario:C}"
-            );*/
+           /* Console.WriteLine($"Empleado: {Nombre}, Edad: {Edad}, Salario: {Salario:C}" );*/
         }
 
-        /*public virtual void Trabajar()
-        {
-            /*Console.WriteLine(
-                $"{Nombre} está realizando sus asignaciones laborales..."
-            );
-        }*/
+        /*public virtual void Trabajar{Console.WriteLine($"{Nombre} está realizando sus asignaciones laborales);}*/
     }
 }

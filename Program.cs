@@ -30,24 +30,13 @@ while (!codigoValidos)
         Console.WriteLine("Entrada no válida. presione enter para intentar nuevamente.");
         Console.ReadKey();
     }
-
 }
-
-/*codigos validos:
-empleados  -  codigo
-Adriana    -  1000
-Ingrid     -  1001
-Dana       -  1010
-Fabiola    -  1100
-*/
-
-
-
 Console.WriteLine("Menu:\n");
 Console.WriteLine("1- Empleados\n");
 Console.WriteLine("2- Productos\n");
-//Console.WriteLine("3- Ventas\n");
+Console.WriteLine("3- Tienda\n");
 
+//agregar  venta e historial
 string opcionM = Console.ReadLine();
 
 Console.WriteLine("\nMovimiento que desea realizar:\n");
@@ -63,7 +52,7 @@ switch (opcionM)
 {
     case "1": //empleados
 
-        RepositorioEmpleados repositorioEmpleados = new RepositorioEmpleados();
+       //RepositorioEmpleados repositorioEmpleados = new RepositorioEmpleados();
         Empleado empleado = new Empleado();
 
         switch (opcionA)
@@ -130,14 +119,13 @@ switch (opcionM)
                 }
 
                 break;
-
             default:
                 Console.WriteLine("Opcion no valida.");
                 break;
         }
 
         break;
-
+//no se porquee sale error en caso 2, checar eso
     case "2": //productos
         RepositorioProductos repoProductos = new RepositorioProductos();
         Producto producto = new Producto();
@@ -187,55 +175,106 @@ switch (opcionM)
                         $"ID: {prod.ID}\n Nombre: {prod.Nombre}\n Precio: {prod.Precio}\n"
                     );
                 }
-                break;
-
-        
-
+                break;            
     default:
         Console.WriteLine("Opcion no valida.");
         break;
 }
+    case "3": //tienda
+        Console.WriteLine("Modulo de tienda");
+        Console.WriteLine("que movimiento desea realizar:\n");
+        Console.WriteLine("1- Registrar venta\n");
+        Console.WriteLine("2- Historial de ventas\n");
+        string opcionT = Console.ReadLine().ToUpper();
 
-
-        break;
-
-    default:
-        Console.WriteLine("Opcion no valida.");
-        break;
-}
-
-
-        //Console.WriteLine("Modulo de productos.");
-
-
- // empleado.Id = 0;
- //repoEmpleados.Actualizar(empleado);
-
-// for(int i = 0; i < listaEmpleados.Count; i++)
-
-
-/*using project2.Clases;
-//using System;
-namespace GestionEmpleados
-{
-    class Program
-    {
-        static void Main(string[] args)
+        switch (opcionT)
         {
-            List<Empleado> empleados = new List<Empleado>
-            {
-                //se pueden asignar empleados 
-                new Programador("Emilian", 29, 35000m, "Java"),
-                new Diseñador("George", 28, 30000, "Photoshop")
-            };
+            case "1": //registrar venta
+                RepositorioProductos repoProductosTienda = new RepositorioProductos();
+                
+                /*venta.CodigoVenta = DateTime.Now.ToString("yyyyMMddHHmmss");
+                venta.Fecha = DateTime.Now;
+                venta.Empleado = usuario;agregar*/
+                Venta venta = new Venta();
+                venta.Total = 0;
+                venta.Fecha = DateTime.Now;                
+                //doble error por la misma variable
+                List<VentaProductos> ListaProductosVenta = new List<VentaProductos>();
+                bool agregarMas = true;
 
+                while (agregarMas)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Registro de venta");
+                    Console.WriteLine("Ingrese el codigo del producto:");//pedir el codigo del producto
+                    if (!int.TryParse(Console.ReadLine(),out int idProducto))
+                    {
+                        Console.WriteLine("codigo no valido");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    //error por algo no sé que es, era el punto y coma 
+                    //pedir la cantidad de producto
+                    Console.WriteLine("ingrese cantidad ");
+                }
+                /*Console.WriteLine("Ingrese el codigo del producto:");
+                int codigoProducto = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Ingrese la cantidad del producto:");
+                int cantidad = Convert.ToInt32(Console.ReadLine()); */
+
+                /*Lo que queremos que se muestre en pantalla
+                 * ---------------------Ticket------------------------
+                 * producto----precio unitario----cantidad----subtotal
+                 * Peras-------35.00--------------4-----------150.00 *
+                 * Queso-------120.00-------------1-----------120.00 *
+                 * Total--------------------------------------270.00 *
+                 * ---------------------------------------------------
+                 */
+
+                Console.WriteLine("Cobrando...");
+                Console.WriteLine("producto--------cantidad--------total");
+
+                foreach (VentaProductos prod in venta.productos)
+                {
+                    // Formato tabulado para alinear nombre, cantidad y total de cada item
+                    Console.WriteLine($"{prod.producto.Nombre,-15} {prod.cantidad,-10} ${prod.total,8:F2}");
+                }
+
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine($"Total: ${venta.Total:F2}");
+
+
+                break;
+            case "2": //historial de ventas
+                Console.WriteLine("Modulo de historial de ventas");
+                break;
+            default:
+                Console.WriteLine("Opcion no valida.");
+                break;
+        }
+
+        break;
+    default:
+        Console.WriteLine("Opcion no valida.");
+        break;
+
+}
+/*Console.WriteLine("Modulo de productos.");
+empleado.Id = 0;
+repoEmpleados.Actualizar(empleado);
+for(int i = 0; i < listaEmpleados.Count; i++)
+using project2.Clases;
+using System;
+namespace GestionEmpleados
+{    class Program
+    {        static void Main(string[] args)
+        {            List<Empleado> empleados = new List<Empleado>
+            {                //se pueden asignar empleados 
+                new Programador("Emilian", 29, 35000m, "Java"),
+                new Diseñador("George", 28, 30000, "Photoshop")            };
             Console.WriteLine("Equipo de trabajo\n");
             foreach (Empleado emp in empleados)
-            {
-                emp.MostrarInformacion();
+            {                emp.MostrarInformacion();
                 emp.Trabajar(); //segun rol
                 Console.WriteLine();
-            }
-        }
-    }
-}*/
+            }        }    }}*/

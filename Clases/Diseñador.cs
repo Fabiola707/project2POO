@@ -12,16 +12,16 @@ namespace project2.Clases
             : base(nombre, edad, salario, id)
         {
             HerramientaDiseño = herramientaDiseño;
-            //asignar la herramienta de diseño que se le da en el constructor
+            asignar la herramienta de diseño que se le da en el constructor
         }
         public void Diseñar()
         {
             Console.WriteLine($"{Nombre} está diseñando con {HerramientaDiseño}");
-            //imprime el nombre del diseñador y la herramienta de diseño
+            imprime el nombre del diseñador y la herramienta de diseño
         }
         public override void Trabajar()
         {
-            Programar(); //llama el metodo de diseñar
+            Programar(); llama el metodo de diseñar
         }*/
     }
 }

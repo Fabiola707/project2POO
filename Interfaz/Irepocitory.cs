@@ -17,6 +17,9 @@ namespace project2.Interfaz
         void Actualizar(T empleado);
         public List<T> Lista();
         public List<T> Buscar(string nombre);
+        //declarar el get by id de los productos
+        public T GetById(int id);
+    
 
     }
 }
