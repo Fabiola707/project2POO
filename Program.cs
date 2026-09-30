@@ -71,7 +71,7 @@ switch (opcionM)
                 empleado.Edad = Convert.ToInt32(Console.ReadLine());
 
                 Console.WriteLine("ID del empleado:");
-                empleado.ID = Convert.ToInt32(Console.ReadLine());
+                empleado.Id = Convert.ToInt32(Console.ReadLine());
 
                 repoEmpleados.Registro(empleado);
 
@@ -80,7 +80,7 @@ switch (opcionM)
             case "2": //actualizar
 
                 Console.WriteLine("Ingrese el ID del empleado:");
-                empleado.ID = Convert.ToInt32(Console.ReadLine());
+                empleado.Id = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Ingrese el código del empleado:");
                 empleado.Codigo = Convert.ToInt32(Console.ReadLine());
 
@@ -101,7 +101,7 @@ switch (opcionM)
 
                 Console.WriteLine("Ingrese el ID del empleado:");
 
-                empleado.ID = Convert.ToInt32(Console.ReadLine());
+                empleado.Id = Convert.ToInt32(Console.ReadLine());
 
                 repoEmpleados.Borrar(empleado);
 
@@ -114,7 +114,7 @@ switch (opcionM)
                 foreach (Empleado emp in listaEmpleados)
                 {
                     Console.WriteLine(
-                        $"ID: {emp.ID}\n Codigo: {emp.Codigo}\n Nombre: {emp.Nombre}\n Edad: {emp.Edad}\n Salario: {emp.Salario}\n"
+                        $"ID: {emp.Id}\n Codigo: {emp.Codigo}\n Nombre: {emp.Nombre}\n Edad: {emp.Edad}\n Salario: {emp.Salario}\n"
                     );
                 }
 
@@ -138,14 +138,14 @@ switch (opcionM)
                 Console.WriteLine("Precio del producto:");
                 producto.Precio = Convert.ToDecimal(Console.ReadLine());
                 Console.WriteLine("ID del producto:");
-                producto.ID = Convert.ToInt32(Console.ReadLine());
+                producto.Id = Convert.ToInt32(Console.ReadLine());
                 repoProductos.Registro(producto);
 
                 break;
 
             case "2": //actualizar
                 Console.WriteLine("Ingrese el ID del producto:");
-                producto.ID = Convert.ToInt32(Console.ReadLine());
+                producto.Id = Convert.ToInt32(Console.ReadLine());
 
                 Console.WriteLine("Ingrese nuevo nombre:");
                 producto.Nombre = Console.ReadLine();
@@ -158,7 +158,7 @@ switch (opcionM)
 
             case "3": //borrar
                 Console.WriteLine("Ingrese el ID del producto:");
-                producto.ID = Convert.ToInt32(Console.ReadLine());
+                producto.Id = Convert.ToInt32(Console.ReadLine());
 
                 repoProductos.Borrar(producto);
 
@@ -172,7 +172,7 @@ switch (opcionM)
                 foreach (Producto prod in listaProductos)
                 {
                     Console.WriteLine(
-                        $"ID: {prod.ID}\n Nombre: {prod.Nombre}\n Precio: {prod.Precio}\n"
+                        $"ID: {prod.Id}\n Nombre: {prod.Nombre}\n Precio: {prod.Precio}\n"
                     );
                 }
                 break;            
@@ -190,6 +190,7 @@ switch (opcionM)
         switch (opcionT)
         {
             case "1": //registrar venta
+
                 RepositorioProductos repoProductosTienda = new RepositorioProductos();
                 
                 /*venta.CodigoVenta = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -234,10 +235,10 @@ switch (opcionM)
                 Console.WriteLine("Cobrando...");
                 Console.WriteLine("producto--------cantidad--------total");
 
-                foreach (VentaProductos prod in venta.productos)
+                foreach (VentaProductos prod in venta.producto)//ERROR
                 {
                     // Formato tabulado para alinear nombre, cantidad y total de cada item
-                    Console.WriteLine($"{prod.producto.Nombre,-15} {prod.cantidad,-10} ${prod.total,8:F2}");
+                    Console.WriteLine($"{prod.NombreProducto,-15} {prod.Cantidad,-10} ${prod.Subtotal,8:F2}");
                 }
 
                 Console.WriteLine("-------------------------------------");

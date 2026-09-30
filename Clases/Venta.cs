@@ -6,15 +6,32 @@ namespace project2.Clases
 {
     public class Venta
     { //5 propiedades
+        public int Id { get; set; }//*****
         public string CodigoVenta { get; set; } //codigo de venta       
-        public List<VentaProductos> productos { get; set; } //lista de productos
-        public DateTime Fecha { get; set; }//fecha de venta
+        
+        public DateTime Fecha { get; set; }//fecha de venta*****
         public Empleado Empleado { get; set; }//empleado que realizo la venta
-        public decimal Total { get; set; } //total de la venta
+        public decimal Total { get; set; } //total de la venta******
+        public List<VentaProductos> Detalles { get; set; } = new List<VentaProductos>//lista de productos ERROR EN DETALLES
 
+
+        /*Para mysql, una tabla tal que así
+         * VENTAS (es id de aqui es el id cuenta en la siguiente tabla)
+         * id--empleado--fecha--total
+         *   |          |      |     |
+         * ---------------------------
+         *   |          |      |     |
+         * ---------------------------
+         *   
+         * VENTA PRODUCTOS
+         * id--id cuenta--id producto--precio--cantidad--total
+         *   |           |            |       |         |      |
+         * -----------------------------------------------------
+         *   |           |            |       |         |      |
+         * -----------------------------------------------------*/
         public Venta()
         {
-            productos = new List<VentaProductos>();
+            NombreProducto = new List<VentaProductos>();//ERROR
             Total = 0;
             Fecha = DateTime.Now;
         }
@@ -23,13 +40,13 @@ namespace project2.Clases
             decimal totalProducto = producto.Precio * cantidad;
             VentaProductos productoVendido = new VentaProductos
             {
-                producto = producto,
-                cantidad = cantidad,
-                total = totalProducto
+                ProductoId = productoId,//ERROR 
+                Cantidad = cantidad,
+                Subtotal = totalProducto
 
             };
 
-            productos.Add(productoVendido);
+            Producto.Add(productoVendido);//ERROR
             Total += totalProducto;
         }
 

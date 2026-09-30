@@ -10,7 +10,7 @@ using MySql.Data.MySqlClient;
 
 namespace project2.Repositorio
 {
-    internal class RepositorioEmpleados : Irepocitory<Empleado>
+    internal class RepositorioEmpleados : Irepocitory<Empleado>//ERROR
     {
 
         private string connStr = "Server=localhost;Port=3307;Database=project2_db;Uid=root;Password=19503236;";
@@ -51,7 +51,7 @@ namespace project2.Repositorio
                 comm.Parameters.AddWithValue("@nombre", empleado.Nombre);
                 comm.Parameters.AddWithValue("@salario", empleado.Salario);
                 comm.Parameters.AddWithValue("@edad", empleado.Edad);
-                comm.Parameters.AddWithValue("@id", empleado.ID);
+                comm.Parameters.AddWithValue("@id", empleado.Id);
 
                 try
                 {
@@ -63,7 +63,7 @@ namespace project2.Repositorio
                     }
                     else
                     {
-                        Console.WriteLine("No se encontró el empleado con ID: " + empleado.ID);
+                        Console.WriteLine("No se encontró el empleado con ID: " + empleado.Id);
                     }
                 }
                 catch (Exception ex)
@@ -82,7 +82,7 @@ namespace project2.Repositorio
             using (MySqlConnection conn = new MySqlConnection(connStr))
             {
                 MySqlCommand comm = new MySqlCommand("DELETE FROM empleados WHERE ID=@id", conn);
-                comm.Parameters.AddWithValue("@id", empleado.ID);
+                comm.Parameters.AddWithValue("@id", empleado.Id);
                 try
                 {
                     conn.Open();
@@ -93,7 +93,7 @@ namespace project2.Repositorio
                     }
                     else
                     {
-                        Console.WriteLine("No se encontró el empleado con ID: " + empleado.ID);
+                        Console.WriteLine("No se encontró el empleado con ID: " + empleado.Id);
                     }
                 }
                 catch (Exception ex)
@@ -125,7 +125,7 @@ namespace project2.Repositorio
                             while (dr.Read())
                             {
                                 Empleado empleado = new Empleado();
-                                empleado.ID = Convert.ToInt32(dr["ID"]);
+                                empleado.Id = Convert.ToInt32(dr["ID"]);
                                 empleado.Codigo = Convert.ToInt32(dr["Codigo"]);
                                 empleado.Nombre = dr["Nombre"].ToString();    
                                 empleado.Edad = Convert.ToInt32(dr["Edad"]);
@@ -161,7 +161,7 @@ namespace project2.Repositorio
                             {
                                 Empleado empleado = new Empleado();
                                 empleado.Nombre = dr["Nombre"].ToString();
-                                empleado.ID = Convert.ToInt32(dr["ID"]);
+                                empleado.Id = Convert.ToInt32(dr["ID"]);
                                 empleado.Codigo = Convert.ToInt32(dr["Codigo"]);
                                // empleado.Edad = Convert.ToInt32(dr["Edad"]);
                                 //empleado.Salario = Convert.ToDecimal(dr["Salario"]);

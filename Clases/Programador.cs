@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,6 +26,6 @@ namespace project2.Clases
         public override void MostrarInformacion()
         {
             Programar();//llama el metodo de programar
-        }*/
+        }
     }
-}
+}*/

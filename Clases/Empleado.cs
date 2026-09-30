@@ -8,7 +8,7 @@ namespace project2.Clases
 {
     public class Empleado
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public int Codigo { get; set; }
         public string Nombre { get; set; }
         public int Edad { get; set; }
@@ -17,7 +17,7 @@ namespace project2.Clases
         public Empleado() { }
         public Empleado(int id, int codigo, string nombre, int edad, decimal salario)
         {
-            ID = id;
+            Id = id;
             Codigo = codigo;
             Nombre = nombre;
             Edad = edad;

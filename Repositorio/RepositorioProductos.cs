@@ -8,24 +8,27 @@ using System.Reflection.Metadata.Ecma335;
 
 //agregar vender 
 namespace project2.Repositorio
-
 {
     //siempre marca error el repocitory
-    internal class RepositorioProductos : Irepocitory<Producto>
-
+    internal class RepositorioProductos : Irepocitory<Producto>//ERROR
     {
-        private string connStr = "Server=localhost;Port=3307;Database=project2_db;Uid=root;Password=19503236;";
+        private readonly string _connectionString;
+        public RepositorioProductos(string connectionString)
+        {
+            _connectionString = connectionString; 
+        }
+           // = "Server=localhost;Port=3307;Database=project2_db;Uid=root;Password=19503236;";
         //actualizar
         public void Actualizar(Producto producto)
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 string query = "UPDATE productos SET Nombre = @nombre, Precio = @precio WHERE ID = @id";
                 using (MySqlCommand comm = new MySqlCommand(query, conn))
                 {
                     comm.Parameters.AddWithValue("@nombre", producto.Nombre);
                     comm.Parameters.AddWithValue("@precio", producto.Precio);
-                    comm.Parameters.AddWithValue("@id", producto.ID);
+                    comm.Parameters.AddWithValue("@id", producto.Id);
                     try
                     {
                         conn.Open();
@@ -37,18 +40,17 @@ namespace project2.Repositorio
                         Console.WriteLine("Error: " + ex.Message);
                     }
                 }
-            }
-            //Console.WriteLine("Producto actualizado: ");
+            } //Console.WriteLine("Producto actualizado: ");
         }
         //borrar
         public void Borrar(Producto producto)
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 string query = "DELETE FROM productos WHERE ID = @id";
                 using (MySqlCommand comm = new MySqlCommand(query, conn))
                 {
-                    comm.Parameters.AddWithValue("@id", producto.ID);
+                    comm.Parameters.AddWithValue("@id", producto.Id);
                     try
                     {
                         conn.Open();
@@ -60,14 +62,13 @@ namespace project2.Repositorio
                         Console.WriteLine("Error: " + ex.Message);
                     }
                 }
-            }
-            //Console.WriteLine("Producto eliminado: " );
+            }//Console.WriteLine("Producto eliminado: " );
         }
         //buscar
         public List<Producto> Buscar(string nombre)
         {
             List<Producto> productos = new List<Producto>();
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 string query = "SELECT * FROM productos WHERE Nombre LIKE @nombre";
                 using (MySqlCommand comm = new MySqlCommand(query, conn))
@@ -81,7 +82,7 @@ namespace project2.Repositorio
                             while (reader.Read())
                             {
                                 Producto producto = new Producto();
-                                producto.ID = reader.GetInt32("ID");
+                                producto.Id = reader.GetInt32("ID");
                                 producto.Nombre = reader.GetString("Nombre");
                                 producto.Precio = reader.GetDecimal("Precio");
                                 productos.Add(producto);
@@ -93,15 +94,15 @@ namespace project2.Repositorio
                         Console.WriteLine("Error: " + ex.Message);
                     }
                 }
-            }
-            //throw new NotImplementedException();
+            }//throw new NotImplementedException();
             return productos;
         }
         //lista
-        public List<Producto> Lista()
+        public List<Producto> Listar()
         {
-            List<Producto> productos = new List<Producto>();
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            var Lista = new List<Producto>();
+            
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 string query = "SELECT * FROM productos";
                 using (MySqlCommand comm = new MySqlCommand(query, conn))
@@ -114,10 +115,10 @@ namespace project2.Repositorio
                             while (reader.Read())
                             {
                                 Producto producto = new Producto();
-                                producto.ID = reader.GetInt32("ID");
+                                producto.Id = reader.GetInt32("ID");
                                 producto.Nombre = reader.GetString("Nombre");
                                 producto.Precio = reader.GetDecimal("Precio");
-                                productos.Add(producto);
+                                producto.Add(producto);
                             }
                         }
                     }
@@ -132,17 +133,18 @@ namespace project2.Repositorio
         //registro
         public void Registro(Producto producto)
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
-            {
-                string query = "INSERT INTO productos (Nombre, Precio) VALUES (@nombre, @precio)";
-                using (MySqlCommand comm = new MySqlCommand(query, conn))
+            using var conn = new MySqlConnection(_connectionString);
+            conn.Open();
+            
+                string sql = "INSERT INTO productos (Nombre, Precio) VALUES (@nombre, @precio)";
+            using var cmd = new MySqlCommand(sql, conn);
                 {
-                    comm.Parameters.AddWithValue("@nombre", producto.Nombre);
-                    comm.Parameters.AddWithValue("@precio", producto.Precio);
+                cmd.Parameters.AddWithValue("@nombre", producto.Nombre);
+                cmd.Parameters.AddWithValue("@precio", producto.Precio);
+                cmd.Parameters.AddWithValue("@stock", producto.Stock);
                     try
                     {
-                        conn.Open();
-                        comm.ExecuteNonQuery();
+                        cmd.ExecuteNonQuery();
                         Console.WriteLine("Producto registrado");
                     }
                     catch (Exception ex)
@@ -150,13 +152,13 @@ namespace project2.Repositorio
                         Console.WriteLine("Error: " + ex.Message);
                     }
                 }
-            }
+            
         }
         public Producto ObtenerProducto(int id)
         {
             Producto producto = null;
 
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 string query = "SELECT ID, Nombre, Precio FROM productos WHERE ID = @id";
 
@@ -174,7 +176,7 @@ namespace project2.Repositorio
                             {
                                 producto = new Producto
                                 {
-                                    ID = reader.GetInt32("ID"),
+                                    Id = reader.GetInt32("ID"),
                                     Nombre = reader.GetString("Nombre"),
                                     Precio = reader.GetDecimal("Precio")
                                 };
@@ -187,14 +189,11 @@ namespace project2.Repositorio
                     }
                 }
             }
-
             return producto;
-        }
-        
-
+        } 
         public void Vender(int idProducto, int cantidad, decimal subtotal)
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
 
                 string query = "INSERT INTO ventas (ProductoID, Cantidad, Total, Fecha) VALUES (@idProducto, @cantidad, @subtotal, @fecha)";
@@ -205,7 +204,6 @@ namespace project2.Repositorio
                     comm.Parameters.AddWithValue("@cantidad", cantidad);
                     comm.Parameters.AddWithValue("@subtotal", subtotal);
                     comm.Parameters.AddWithValue("@fecha", DateTime.Now);
-
                     try
                     {
                         conn.Open();
@@ -221,7 +219,7 @@ namespace project2.Repositorio
         }
         public void HistorialVentas()
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
             {
                 // Realizamos un JOIN para mostrar el nombre del producto vendido
                 string query = @"SELECT v.ID, p.Nombre, v.Cantidad, v.Total, v.Fecha 
@@ -250,6 +248,4 @@ namespace project2.Repositorio
             }
         }
     }
-
 }
-
