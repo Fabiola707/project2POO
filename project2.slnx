@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="../Core/Core.csproj" Id="1fce9e63-0ea0-4fe2-b08d-ee9b59917eba" />
+  <Project Path="../Tienda/Tienda.csproj" Id="e6def778-2092-4d30-98f1-b61f62ddbce0" />
   <Project Path="project2.csproj" />
 </Solution>
